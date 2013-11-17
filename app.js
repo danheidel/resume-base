@@ -45,7 +45,7 @@ app.get('/stardist/:dist', function(req, res){
   }else{
     console.log('query for: ' + dist);
     console.log(db);
-    if(db.connection == 'disconnected'){
+    if(db.state == 'disconnected'){
       console.log('db connection is down');
       res.send('db connection is down');
     }
