@@ -44,10 +44,12 @@ app.get('/stardist/:dist', function(req, res){
     res.send([]);
   }else{
     console.log('query for: ' + dist);
-    console.log(db);
+    console.log(db.state);
     if(db.state == 'disconnected'){
       console.log('db connection is down');
       res.send('db connection is down');
+      console.log('db down, connection snapshot:');
+      console.dir(db);
     }
     db.query('SELECT StarID, BayerFlamstead, ProperName, RA, Dec_, Distance, Mag, AbsMag, Spectrum, ColorIndex, CalcSpectrum FROM good_dist WHERE Distance < ' + dist, function (err, rows){
       if (err){
