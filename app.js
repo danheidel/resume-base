@@ -9,7 +9,7 @@ if(typeof port === 'undefined'){
 }	
 
 //init database access
-db = dbCon.openDbConnection({
+dbCon.initDbPool({
   host: 'localhost',
   user: 'root',
   password: 'Ih35MV9XqLcS',
@@ -44,14 +44,7 @@ app.get('/stardist/:dist', function(req, res){
     res.send([]);
   }else{
     console.log('query for: ' + dist);
-    console.log(db.state);
-    if(db.state == 'disconnected'){
-      console.log('db connection is down');
-      res.send('db connection is down');
-      console.log('db down, connection snapshot:');
-      console.dir(db);
-    }
-    db.query('SELECT StarID, BayerFlamstead, ProperName, RA, Dec_, Distance, Mag, AbsMag, Spectrum, ColorIndex, CalcSpectrum FROM good_dist WHERE Distance < ' + dist, function (err, rows){
+    dbCon.dbQuery('SELECT StarID, BayerFlamstead, ProperName, Distance, AbsMag, Spectrum, ColorIndex, CalcSpectrum FROM good_dist WHERE Distance < ' + dist, function (err, rows){
       if (err){
         console.log(err);
         res.send(err);
@@ -67,9 +60,5 @@ app.listen(port);
 console.log('serving danheidel.net on port: ' + port);
 
 process.on('exit', function() {
-  dbCon.closeDbConnection(db);
 });
 
-function dbQuery(req, res){
-  
-}
